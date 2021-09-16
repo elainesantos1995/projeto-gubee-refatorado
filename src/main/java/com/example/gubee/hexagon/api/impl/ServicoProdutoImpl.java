@@ -2,21 +2,16 @@ package com.example.gubee.hexagon.api.impl;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.example.gubee.hexagon.api.ServicoProduto;
 import com.example.gubee.hexagon.domain.Produto;
 import com.example.gubee.hexagon.spi.ProdutoRepository;
 
 import lombok.RequiredArgsConstructor;
 
-//@RequiredArgsConstructor
-//@Service
+@RequiredArgsConstructor
 public class ServicoProdutoImpl implements ServicoProduto{
 	
-	@Autowired
-	private ProdutoRepository repository;
+	private final ProdutoRepository repository;
 
 	@Override
 	public Produto save(Produto produto) {
@@ -45,7 +40,12 @@ public class ServicoProdutoImpl implements ServicoProduto{
 
 	@Override
 	public List<Produto> getAllByFilterPersonal(String tecnologias, String mercadoAlvo) {
-		return repository.getAllByFilterPersonal(tecnologias, mercadoAlvo);
+		
+		if((tecnologias == null || tecnologias.equals("")) && (mercadoAlvo == null || mercadoAlvo.equals(""))) {						
+			return this.repository.getAll();
+		} else {
+			return this.repository.getAllByFilterPersonal(tecnologias, mercadoAlvo);
+		}
 	}
 
 }

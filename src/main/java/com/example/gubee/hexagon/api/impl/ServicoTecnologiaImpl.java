@@ -2,19 +2,16 @@ package com.example.gubee.hexagon.api.impl;
 
 import java.util.List;
 
-import org.springframework.stereotype.Service;
-
 import com.example.gubee.hexagon.api.ServicoTecnologia;
 import com.example.gubee.hexagon.domain.Tecnologia;
 import com.example.gubee.hexagon.spi.TecnologiaRepository;
 
 import lombok.RequiredArgsConstructor;
 
-//@RequiredArgsConstructor
-//@Service
+@RequiredArgsConstructor
 public class ServicoTecnologiaImpl implements ServicoTecnologia{
 	
-	private TecnologiaRepository repository;
+	private final TecnologiaRepository repository;
 
 	@Override
 	public Tecnologia save(Tecnologia tecnologia) {

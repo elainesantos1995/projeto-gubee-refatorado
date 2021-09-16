@@ -3,7 +3,6 @@ package com.example.gubee.hexagon.spi.impl;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -13,15 +12,13 @@ import com.example.gubee.hexagon.domain.adapter.TecnologiaDB;
 import com.example.gubee.hexagon.domain.adapter.TecnologiaRepositoryDB;
 import com.example.gubee.hexagon.spi.TecnologiaRepository;
 
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
 @Service
 public class TecnologiaRepositoryImpl implements TecnologiaRepository{
 		
-	private TecnologiaRepositoryDB repository;
-	
-	@Autowired
-	public void setTecnologiaRepositoryImpl(TecnologiaRepositoryDB repository) {
-		this.repository = repository;
-	}
+	private final TecnologiaRepositoryDB repository;
 
 	@Override
 	public Tecnologia save(Tecnologia tecnologia) {

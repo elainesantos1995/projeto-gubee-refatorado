@@ -61,12 +61,7 @@ public class ProdutoResource {
 	@ResponseStatus(HttpStatus.OK)	
 	public List<Produto> getByFilter(@RequestParam(required = false) String tecnologias, @RequestParam(required = false) String mercadoAlvo) {
 		
-		if((tecnologias == null || tecnologias.equals("")) && (mercadoAlvo == null || mercadoAlvo.equals(""))) {						
-			return this.service.getAll();
-		} else {
-			return this.service.getAllByFilterPersonal(tecnologias, mercadoAlvo);
-		}
-	
+		return this.service.getAllByFilterPersonal(tecnologias, mercadoAlvo);	
 	}
 
 }

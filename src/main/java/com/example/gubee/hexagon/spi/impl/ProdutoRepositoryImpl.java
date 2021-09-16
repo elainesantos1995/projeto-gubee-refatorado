@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -17,15 +16,13 @@ import com.example.gubee.hexagon.domain.adapter.ProdutoDB;
 import com.example.gubee.hexagon.domain.adapter.ProdutoRepositoryDB;
 import com.example.gubee.hexagon.spi.ProdutoRepository;
 
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
 @Service
 public class ProdutoRepositoryImpl implements ProdutoRepository{
 	
-	private ProdutoRepositoryDB repository;
-	
-	@Autowired
-    public void setProdutoRepositoryImpl(ProdutoRepositoryDB repository){
-          this.repository = repository;
-    }
+	private final ProdutoRepositoryDB repository;
 
 	@Override
 	public Produto save(Produto produto) {
