@@ -2,6 +2,7 @@ package com.example.gubee.hexagon.spi.impl;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -132,19 +133,97 @@ class ProdutoRepositoryImplTest {
 }
 
 	@Test
-	void deveriaTrazerProdutoFiltradosApenasPorMercadoAlvo() {
+	void deveriaTrazerProdutoFiltradosPorUmaTecnologia() {
 		
 		List<ProdutoDB> produtosDB = new ArrayList<ProdutoDB>();
 		produtosDB.add(produtoDB1);
 		
-		List<String> tecs = new ArrayList<>();
-		Set<String> setDeTecs = new HashSet<>(tecs);
+		Mockito.when(produtoRepository.getAllByFilterPersonal(Mockito.anySet(), Mockito.anyString())).thenReturn(produtosDB);	   
 		
-		Mockito.when(produtoRepository.getAllByFilterPersonal(setDeTecs, "Alimentação")).thenReturn(produtosDB);	   
+		List<Produto> prod = produtoService.getAllByFilterPersonal("MySql", "");
 		
-		List<Produto> prod = produtoService.getAllByFilterPersonal(null, "Alimentação");
+		assertEquals(prod.get(0).getNomeProduto(), "Produto 1");
+	}
+	
+	@Test
+	void deveriaTrazerProdutoFiltradoPorMaisDeUmaTecnologia() {
 		
-		assertEquals(prod.get(1).getNomeProduto(), "Produto 1");
+		List<ProdutoDB> produtosDB = new ArrayList<ProdutoDB>();
+		produtosDB.add(produtoDB1);
+		
+		Mockito.when(produtoRepository.getAllByFilterPersonal(Mockito.anySet(), Mockito.anyString())).thenReturn(produtosDB);	   
+		
+		List<Produto> prod = produtoService.getAllByFilterPersonal("MySql,Java", "");
+		
+		assertEquals(prod.get(0).getNomeProduto(), "Produto 1");
+		assertEquals(1, prod.size());
+	}
+	
+	@Test
+	void deveriaTrazerMaisDeUmProdutoFiltradosPorUmaTecnologia() {
+		
+		List<ProdutoDB> produtosDB = new ArrayList<ProdutoDB>();
+		produtosDB.add(produtoDB1);
+		produtosDB.add(produtoDB2);
+		
+		Mockito.when(produtoRepository.getAllByFilterPersonal(Mockito.anySet(), Mockito.anyString())).thenReturn(produtosDB);	   
+		
+		List<Produto> prod = produtoService.getAllByFilterPersonal("MySql", "");
+		
+		assertEquals(2, prod.size());
+		assertEquals(prod.get(0).getNomeProduto(), "Produto 1");
+		assertEquals(prod.get(1).getNomeProduto(), "Produto 2");
+	}
+	
+	@Test
+	void deveriaTrazerProdutoFiltradosApenasPorMecadoAlvo() {
+		
+		List<ProdutoDB> produtosDB = new ArrayList<ProdutoDB>();
+		produtosDB.add(produtoDB2);
+		
+		Mockito.when(produtoRepository.getAllByFilterPersonal(Mockito.anySet(), Mockito.anyString())).thenReturn(produtosDB);	   
+		
+		List<Produto> prod = produtoService.getAllByFilterPersonal("", "Alimentação");
+		
+		assertEquals(prod.get(0).getNomeProduto(), "Produto 2");
+	}
+	
+	@Test
+	void deveriaTrazerProdutoFiltradosPorTecnologiasEMercadoAlvo() {
+		
+		List<ProdutoDB> produtosDB = new ArrayList<ProdutoDB>();
+		produtosDB.add(produtoDB1);
+		
+		Mockito.when(produtoRepository.getAllByFilterPersonal(Mockito.anySet(), Mockito.anyString())).thenReturn(produtosDB);	   
+		
+		List<Produto> prod = produtoService.getAllByFilterPersonal("Java", "Alimentação");
+		
+		assertEquals(prod.get(0).getNomeProduto(), "Produto 1");
+	}
+	
+	@Test
+	void deveriaTrazerProdutoFiltradosPorTecnologiaNaoCadastradaEMercadoAlvoExistente() {
+		
+		List<ProdutoDB> produtosDB = new ArrayList<ProdutoDB>();
+		produtosDB.add(produtoDB1);
+		
+		Mockito.when(produtoRepository.getAllByFilterPersonal(Mockito.anySet(), Mockito.anyString())).thenReturn(produtosDB);	   
+		
+		List<Produto> prod = produtoService.getAllByFilterPersonal("Lua", "Alimentação");
+		
+		assertEquals(prod.size(), 1);
+	}
+	
+	@Test
+	void deveriaNaoTrazerProdutoFiltradosPorTecnologiasNaoCadastradaEMercadoAlvoNaoExistente() {
+		
+		List<ProdutoDB> produtosDB = new ArrayList<ProdutoDB>();
+		
+		Mockito.when(produtoRepository.getAllByFilterPersonal(Mockito.anySet(), Mockito.anyString())).thenReturn(produtosDB);	   
+		
+		List<Produto> prod = produtoService.getAllByFilterPersonal("Lua", "Comércio");
+		
+		assertEquals(prod.size(), 0);
 	}
 	
 	@Test
